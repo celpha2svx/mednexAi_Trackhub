@@ -1,2 +1,4 @@
 -r base.txt
+gunicorn>=21.2
 sentry-sdk[django]>=1.40
+dj-database-url>=2.1

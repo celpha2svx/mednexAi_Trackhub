@@ -1,4 +1,5 @@
 from .base import *  # noqa
+import dj_database_url
 
 DEBUG = False
 
@@ -10,13 +11,5 @@ SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': env('DB_NAME'),         # noqa
-        'USER': env('DB_USER'),         # noqa
-        'PASSWORD': env('DB_PASSWORD'), # noqa
-        'HOST': env('DB_HOST'),         # noqa
-        'PORT': env('DB_PORT', default='5432'),  # noqa
-        'CONN_MAX_AGE': 60,
-    }
+    'default': dj_database_url.config(conn_max_age=600)
 }
