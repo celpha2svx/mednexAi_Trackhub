@@ -7,7 +7,7 @@
 ---
 
 ## 🌍 Live Demo
-👉 [your-app.onrender.com](https://your-app.onrender.com)
+👉 [mednexai-trackhub.com](https://mednexai-trackhub.onrender.com/)
 
 ---
 
