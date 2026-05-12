@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% block title %}Peer Feed – MEDNEXAI TrackHub{% endblock %}
+{% block content %}
+
+<!-- Header -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+  <div>
+    <h2 class="text-2xl font-bold text-gray-800">🌍 Peer Progress Feed</h2>
+    <p class="text-gray-500 text-sm">See what your community is building today.</p>
+  </div>
+  <div class="flex items-center gap-3">
+    <span class="bg-orange-100 text-orange-700 px-4 py-2 rounded-full font-semibold text-sm">
+      🔥 Your Streak: {{ user_streak }} day{{ user_streak|pluralize }}
+    </span>
+    <a href="{% url 'submit' %}" class="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-indigo-700 transition">
+      + Submit Today
+    </a>
+  </div>
+</div>
+
+<!-- Feed -->
+<div class="space-y-4">
+  {% for report in reports %}
+  <div class="bg-white rounded-xl shadow-sm border-l-4 p-5
+    {% if report.user == user %}border-indigo-500{% else %}border-gray-200{% endif %}
+    hover:shadow-md transition">
+
+    <div class="flex justify-between items-start mb-2">
+      <div>
+        <span class="font-semibold text-gray-800">{{ report.user.username }}</span>
+        <span class="ml-2 text-xs bg-indigo-50 text-indigo-600 px-2 py-0.5 rounded-full font-medium">Day {{ report.report_day }}</span>
+        {% if report.user == user %}
+          <span class="ml-1 text-xs bg-green-50 text-green-600 px-2 py-0.5 rounded-full">You</span>
+        {% endif %}
+      </div>
+      <span class="text-gray-400 text-xs">{{ report.date }}</span>
+    </div>
+
+    <p class="text-gray-700 text-sm mb-3 leading-relaxed">{{ report.task_description|truncatewords:40 }}</p>
+
+    <div class="flex flex-wrap gap-4 text-xs text-gray-500">
+      <span>⏱️ <strong>{{ report.hours_today }}h</strong> today / <strong>{{ report.hours_total }}h</strong> total</span>
+      <span>📊 Discipline: <strong>{{ report.discipline_score }}/{{ report.discipline_max }}</strong> ({{ report.discipline_percentage }}%)</span>
+      <span>
+        {% if report.visibility_status %}✅ Status{% endif %}
+        {% if report.visibility_twitter %}✅ Twitter{% endif %}
+        {% if report.visibility_comment %}✅ Comment{% endif %}
+      </span>
+    </div>
+  </div>
+  {% empty %}
+  <div class="text-center py-20 text-gray-400">
+    <p class="text-4xl mb-3">📭</p>
+    <p class="font-medium">No reports yet. Be the first to submit!</p>
+    <a href="{% url 'submit' %}" class="mt-3 inline-block text-indigo-600 hover:underline text-sm">Submit your first report →</a>
+  </div>
+  {% endfor %}
+</div>
+
+<!-- Pagination -->
+{% if page_obj.has_other_pages %}
+<div class="flex justify-center gap-2 mt-8 text-sm">
+  {% if page_obj.has_previous %}
+    <a href="?page={{ page_obj.previous_page_number }}" class="px-3 py-1 rounded border border-gray-300 hover:bg-gray-100">← Prev</a>
+  {% endif %}
+  <span class="px-3 py-1 text-gray-500">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+  {% if page_obj.has_next %}
+    <a href="?page={{ page_obj.next_page_number }}" class="px-3 py-1 rounded border border-gray-300 hover:bg-gray-100">Next →</a>
+  {% endif %}
+</div>
+{% endif %}
+
+{% endblock %}
